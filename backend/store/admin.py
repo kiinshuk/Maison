@@ -42,5 +42,17 @@ class ReviewAdmin(admin.ModelAdmin):
     list_filter = ['rating']
 
 
-admin.site.register(Cart)
-admin.site.register(CartItem)
+@admin.register(Cart)
+class CartAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'item_count', 'created_at']
+    readonly_fields = ['user', 'created_at', 'updated_at']
+
+    def item_count(self, obj):
+        return obj.items.count()
+    item_count.short_description = 'Items'
+
+
+@admin.register(CartItem)
+class CartItemAdmin(admin.ModelAdmin):
+    list_display = ['id', 'cart', 'product', 'quantity']
+    readonly_fields = ['cart', 'product']
