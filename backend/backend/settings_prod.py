@@ -14,9 +14,10 @@ ALLOWED_HOSTS = [
 ]
 
 # Allow your Vercel frontend domain
-CORS_ALLOWED_ORIGINS = [
-    os.environ.get('FRONTEND_URL', 'https://your-app.vercel.app'),
-]
+_frontend_url = os.environ.get('FRONTEND_URL', '').strip()
+CORS_ALLOWED_ORIGINS = [url for url in [_frontend_url] if url.startswith('http')]
+if not CORS_ALLOWED_ORIGINS:
+    CORS_ALLOW_ALL_ORIGINS = True  # fallback until frontend URL is set
 CORS_ALLOW_CREDENTIALS = True
 
 # Database — Render provides DATABASE_URL env var for PostgreSQL
