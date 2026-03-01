@@ -6,11 +6,7 @@ from .models import Category, Product, ProductImage, Cart, CartItem, Order, Orde
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'slug']
     prepopulated_fields = {'slug': ('name',)}
-
-
-class ProductImageInline(admin.TabularInline):
-    model = ProductImage
-    extra = 1
+    search_fields = ['name']
 
 
 @admin.register(Product)
@@ -20,36 +16,52 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ['name', 'description']
     prepopulated_fields = {'slug': ('name',)}
     list_editable = ['is_available', 'is_featured', 'stock']
-    inlines = [ProductImageInline]
+    readonly_fields = ['created_at', 'updated_at']
+
+
+@admin.register(ProductImage)
+class ProductImageAdmin(admin.ModelAdmin):
+    list_display = ['product', 'alt_text', 'is_primary']
 
 
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
     extra = 0
     readonly_fields = ['product', 'quantity', 'price']
+    can_delete = False
+
+    def has_add_permission(self, request, obj=None):
+        return False
 
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'status', 'total_amount', 'created_at']
     list_filter = ['status']
+    readonly_fields = ['user', 'total_amount', 'created_at', 'updated_at']
     inlines = [OrderItemInline]
+
+    def has_add_permission(self, request):
+        return False
 
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ['product', 'user', 'rating', 'created_at']
     list_filter = ['rating']
+    readonly_fields = ['product', 'user', 'created_at']
+
+    def has_add_permission(self, request):
+        return False
 
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user', 'item_count', 'created_at']
+    list_display = ['id', 'user', 'created_at']
     readonly_fields = ['user', 'created_at', 'updated_at']
 
-    def item_count(self, obj):
-        return obj.items.count()
-    item_count.short_description = 'Items'
+    def has_add_permission(self, request):
+        return False
 
 
 @admin.register(CartItem)
