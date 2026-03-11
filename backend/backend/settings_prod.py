@@ -42,23 +42,23 @@ MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Media files (use external storage like S3 in real prod)
+# Media files - Cloudinary or local storage
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # Backend URL for generating full media URLs in API
 BACKEND_URL = os.environ.get('BACKEND_URL', 'https://maison-dzus.onrender.com')
 
-# Cloudinary Configuration (optional - will fallback to local storage if not set)
-cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME', '')
-api_key = os.environ.get('CLOUDINARY_API_KEY', '')
-api_secret = os.environ.get('CLOUDINARY_API_SECRET', '')
+# Cloudinary Configuration
+CLOUDINARY_CLOUD_NAME = os.environ.get('CLOUDINARY_CLOUD_NAME', '')
+CLOUDINARY_API_KEY = os.environ.get('CLOUDINARY_API_KEY', '')
+CLOUDINARY_API_SECRET = os.environ.get('CLOUDINARY_API_SECRET', '')
+CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL', '')
 
-if cloud_name and api_key and api_secret:
+if CLOUDINARY_CLOUD_NAME and CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET:
     CLOUDINARY_STORAGE = {
-        'CLOUD_NAME': cloud_name,
-        'API_KEY': api_key,
-        'API_SECRET': api_secret,
+        'CLOUD_NAME': CLOUDINARY_CLOUD_NAME,
+        'API_KEY': CLOUDINARY_API_KEY,
+        'API_SECRET': CLOUDINARY_API_SECRET,
     }
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-    CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL', '')
