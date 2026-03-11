@@ -151,23 +151,23 @@ export default function Cart() {
               ) : (
                 <form onSubmit={handlePlaceOrder} className="space-y-4 mb-4">
                   <div>
-                    <label className="text-2xs tracking-widest uppercase text-mocha block mb-1.5">Full Name</label>
-                    <input className="input-box text-sm" placeholder="Jane Smith" value={checkoutForm.name}
+                    <label htmlFor="checkout-name" className="text-2xs tracking-widest uppercase text-mocha block mb-1.5">Full Name</label>
+                    <input id="checkout-name" className="input-box text-sm" placeholder="Jane Smith" value={checkoutForm.name}
                       onChange={e => setCheckoutForm(f => ({ ...f, name: e.target.value }))} required />
                   </div>
                   <div>
-                    <label className="text-2xs tracking-widest uppercase text-mocha block mb-1.5">Email</label>
-                    <input className="input-box text-sm" type="email" placeholder="jane@email.com" value={checkoutForm.email}
+                    <label htmlFor="checkout-email" className="text-2xs tracking-widest uppercase text-mocha block mb-1.5">Email</label>
+                    <input id="checkout-email" className="input-box text-sm" type="email" placeholder="jane@email.com" value={checkoutForm.email}
                       onChange={e => setCheckoutForm(f => ({ ...f, email: e.target.value }))} required />
                   </div>
                   <div>
-                    <label className="text-2xs tracking-widest uppercase text-mocha block mb-1.5">Phone</label>
-                    <input className="input-box text-sm" placeholder="+1 234 567 8900" value={checkoutForm.phone}
+                    <label htmlFor="checkout-phone" className="text-2xs tracking-widest uppercase text-mocha block mb-1.5">Phone</label>
+                    <input id="checkout-phone" className="input-box text-sm" placeholder="+1 234 567 8900" value={checkoutForm.phone}
                       onChange={e => setCheckoutForm(f => ({ ...f, phone: e.target.value }))} required />
                   </div>
                   <div>
-                    <label className="text-2xs tracking-widest uppercase text-mocha block mb-1.5">Shipping Address</label>
-                    <textarea className="input-box text-sm resize-none" rows={3} placeholder="123 Main St, City, State, ZIP"
+                    <label htmlFor="checkout-address" className="text-2xs tracking-widest uppercase text-mocha block mb-1.5">Shipping Address</label>
+                    <textarea id="checkout-address" className="input-box text-sm resize-none" rows={3} placeholder="123 Main St, City, State, ZIP"
                       value={checkoutForm.address} onChange={e => setCheckoutForm(f => ({ ...f, address: e.target.value }))} required />
                   </div>
                   <button type="submit" disabled={ordering} className="w-full btn-primary">

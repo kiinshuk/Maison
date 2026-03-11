@@ -56,12 +56,36 @@ export default function Register() {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-2xs tracking-widest uppercase text-mocha block mb-2">First Name</label>
-                <input className="input" value={form.first_name}
-                  onChange={e => setForm(f => ({ ...f, first_name: e.target.value }))}
-                  placeholder="Jane" />
-              </div>
+            <div>
+              <label htmlFor="first_name" className="text-2xs tracking-widest uppercase text-mocha block mb-2">First Name</label>
+              <input id="first_name" className="input" value={form.first_name}
+                onChange={e => setForm(f => ({ ...f, first_name: e.target.value }))}
+                placeholder="Jane" />
+            </div>
+            <div>
+              <label htmlFor="last_name" className="text-2xs tracking-widest uppercase text-mocha block mb-2">Last Name</label>
+              <input id="last_name" className="input" value={form.last_name}
+                onChange={e => setForm(f => ({ ...f, last_name: e.target.value }))}
+                placeholder="Smith" />
+            </div>
+            <div>
+              <label htmlFor="username" className="text-2xs tracking-widest uppercase text-mocha block mb-2">Username</label>
+              <input id="username" className="input" value={form.username}
+                onChange={e => setForm(f => ({ ...f, username: e.target.value }))}
+                placeholder="janesmith" required />
+            </div>
+            <div>
+              <label htmlFor="email" className="text-2xs tracking-widest uppercase text-mocha block mb-2">Email</label>
+              <input id="email" className="input" type="email" value={form.email}
+                onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                placeholder="jane@example.com" required />
+            </div>
+            <div>
+              <label htmlFor="password" className="text-2xs tracking-widest uppercase text-mocha block mb-2">Password</label>
+              <input id="password" className="input" type="password" value={form.password}
+                onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
+                placeholder="Min. 8 characters" required minLength={8} />
+            </div>
               <div>
                 <label className="text-2xs tracking-widest uppercase text-mocha block mb-2">Last Name</label>
                 <input className="input" value={form.last_name}

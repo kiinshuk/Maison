@@ -133,11 +133,11 @@ export default function Collections() {
           })}
         </div>
         <div className="flex items-center gap-2">
-          <input type="number" placeholder="Min $" value={minPrice}
+          <input id="min-price" type="number" placeholder="Min $" value={minPrice}
             onChange={e => setParam('min_price', e.target.value)}
             className="w-full border border-mink bg-transparent px-2 py-1.5 text-xs text-charcoal placeholder-taupe focus:outline-none focus:border-mocha transition-colors" />
           <span className="text-taupe">–</span>
-          <input type="number" placeholder="Max $" value={maxPrice}
+          <input id="max-price" type="number" placeholder="Max $" value={maxPrice}
             onChange={e => setParam('max_price', e.target.value)}
             className="w-full border border-mink bg-transparent px-2 py-1.5 text-xs text-charcoal placeholder-taupe focus:outline-none focus:border-mocha transition-colors" />
         </div>

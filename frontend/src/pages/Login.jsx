@@ -54,17 +54,17 @@ export default function Login() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="text-2xs tracking-widest uppercase text-mocha block mb-2">Username</label>
-              <input className="input" type="text" value={form.username}
+              <label htmlFor="username" className="text-2xs tracking-widest uppercase text-mocha block mb-2">Username</label>
+              <input id="username" className="input" type="text" value={form.username}
                 onChange={e => setForm(f => ({ ...f, username: e.target.value }))}
                 placeholder="Your username" required autoFocus />
             </div>
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-2xs tracking-widest uppercase text-mocha">Password</label>
+                <label htmlFor="password" className="text-2xs tracking-widest uppercase text-mocha">Password</label>
                 <a href="#" className="text-2xs text-mocha hover:text-charcoal transition-colors">Forgot?</a>
               </div>
-              <input className="input" type="password" value={form.password}
+              <input id="password" className="input" type="password" value={form.password}
                 onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
                 placeholder="Your password" required />
             </div>
