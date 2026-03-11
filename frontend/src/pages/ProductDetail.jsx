@@ -25,16 +25,20 @@ export default function ProductDetail() {
     setLoading(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
     Promise.all([
-      API.get(`/products/${slug}/`),
-      API.get(`/products/${slug}/reviews/`),
+      API.get(`/products/${slug}/`).catch(() => ({ data: null })),
+      API.get(`/products/${slug}/reviews/`).catch(() => ({ data: [] })),
     ]).then(([pr, rr]) => {
+      if (!pr.data) {
+        window.location.href = '/collections';
+        return;
+      }
       setProduct(pr.data);
       setReviews(rr.data);
       // fetch related
       API.get(`/products/?category=${pr.data.category_slug}`).then(res => {
         const all = res.data.results || res.data;
         setRelated(all.filter(p => p.slug !== slug).slice(0, 4));
-      });
+      }).catch(() => setRelated([]));
     }).finally(() => setLoading(false));
   }, [slug]);
 
