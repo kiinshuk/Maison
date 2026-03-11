@@ -40,3 +40,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # Media files (use external storage like S3 in real prod)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Backend URL for generating full media URLs in API
+BACKEND_URL = os.environ.get('BACKEND_URL', '').strip()
+if not BACKEND_URL:
+    BACKEND_URL = 'https://maison-backend.onrender.com'  # Update with your actual Render URL

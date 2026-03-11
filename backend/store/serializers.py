@@ -25,6 +25,9 @@ def get_full_image_url(image_field, request=None):
             pass
     
     if url.startswith('/media/'):
+        backend_url = getattr(settings, 'BACKEND_URL', None)
+        if backend_url:
+            return f"{backend_url}{url}"
         if request:
             return request.build_absolute_uri(url)
         return settings.MEDIA_URL + url
