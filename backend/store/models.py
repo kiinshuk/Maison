@@ -1,12 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import User
+try:
+    from cloudinary.models import CloudinaryField
+except ImportError:
+    CloudinaryField = None
 
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
     description = models.TextField(blank=True)
-    image = models.ImageField(upload_to='categories/', blank=True, default='')
+    if CloudinaryField:
+        image = CloudinaryField('image', folder='maison/categories', blank=True, transformation=[{'width': 800, 'height': 800, 'crop': 'limit'}])
+    else:
+        image = models.ImageField(upload_to='categories/', blank=True, default='')
 
     class Meta:
         verbose_name_plural = 'Categories'
@@ -23,8 +30,12 @@ class Product(models.Model):
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     compare_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    image = models.ImageField(upload_to='products/', blank=True, default='')
-    image_url = models.ImageField(upload_to='products/', blank=True, default='')
+    if CloudinaryField:
+        image = CloudinaryField('image', folder='maison/products', blank=True, transformation=[{'width': 800, 'height': 1000, 'crop': 'limit'}])
+        image_url = CloudinaryField('image_url', folder='maison/products', blank=True, transformation=[{'width': 800, 'height': 1000, 'crop': 'limit'}])
+    else:
+        image = models.ImageField(upload_to='products/', blank=True, default='')
+        image_url = models.ImageField(upload_to='products/', blank=True, default='')
     stock = models.PositiveIntegerField(default=0)
     is_available = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
@@ -48,7 +59,10 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
-    image_url = models.ImageField(upload_to='products/gallery/', blank=True)
+    if CloudinaryField:
+        image_url = CloudinaryField('image', folder='maison/products/gallery', blank=True, transformation=[{'width': 800, 'height': 1000, 'crop': 'limit'}])
+    else:
+        image_url = models.ImageField(upload_to='products/gallery/', blank=True)
     alt_text = models.CharField(max_length=200, blank=True)
     is_primary = models.BooleanField(default=False)
 

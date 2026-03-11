@@ -4,7 +4,7 @@ from django.conf import settings
 from .models import Category, Product, ProductImage, Cart, CartItem, Order, OrderItem, Review
 
 
-def get_full_image_url(image_field, request=None):
+def get_full_image_url(image_field):
     if not image_field:
         return None
     
@@ -16,23 +16,7 @@ def get_full_image_url(image_field, request=None):
     if url.startswith('http'):
         return url
     
-    if hasattr(image_field, 'url') and image_field:
-        try:
-            url = image_field.url
-            if url.startswith('http'):
-                return url
-        except:
-            pass
-    
-    if url.startswith('/media/'):
-        backend_url = getattr(settings, 'BACKEND_URL', None)
-        if backend_url:
-            return f"{backend_url}{url}"
-        if request:
-            return request.build_absolute_uri(url)
-        return settings.MEDIA_URL + url
-    
-    return settings.MEDIA_URL + url
+    return url
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -47,7 +31,7 @@ class CategorySerializer(serializers.ModelSerializer):
         return obj.products.filter(is_available=True).count()
 
     def get_image(self, obj):
-        return get_full_image_url(obj.image, self.context.get('request'))
+        return get_full_image_url(obj.image)
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
@@ -58,7 +42,7 @@ class ProductImageSerializer(serializers.ModelSerializer):
         fields = ['id', 'image_url', 'alt_text', 'is_primary']
 
     def get_image_url(self, obj):
-        return get_full_image_url(obj.image_url, self.context.get('request'))
+        return get_full_image_url(obj.image_url)
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -79,10 +63,10 @@ class ProductSerializer(serializers.ModelSerializer):
         ]
 
     def get_image(self, obj):
-        return get_full_image_url(obj.image, self.context.get('request'))
+        return get_full_image_url(obj.image)
 
     def get_image_url(self, obj):
-        return get_full_image_url(obj.image_url, self.context.get('request'))
+        return get_full_image_url(obj.image_url)
 
 
 class CartItemSerializer(serializers.ModelSerializer):
