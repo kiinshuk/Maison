@@ -2,7 +2,7 @@ services:
   - type: web
     name: maison-backend
     env: python
-    buildCommand: "./build.sh"
+    buildCommand: "pip install -r requirements.txt && python manage.py migrate"
     startCommand: "gunicorn backend.wsgi:application --bind 0.0.0.0:$PORT"
     envVars:
       - key: DJANGO_SETTINGS_MODULE
@@ -10,6 +10,14 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: FRONTEND_URL
-        value: https://your-app.vercel.app
+        value: https://maison-seven-pi.vercel.app
       - key: PYTHON_VERSION
         value: "3.11.0"
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: BACKEND_URL
+        value: https://maison-dzus.onrender.com
