@@ -70,7 +70,7 @@ export default function Cart() {
                 <Link to={`/product/${item.product.slug}`} className="flex-shrink-0">
                   <div className="w-24 h-28 md:w-28 md:h-36 overflow-hidden bg-sand">
                     <img
-                      src={item.product.image_url || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300'}
+                      src={item.product.image || item.product.image_url || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300'}
                       alt={item.product.name}
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                       onError={e => { e.target.src = 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300'; }}

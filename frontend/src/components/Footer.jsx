@@ -35,12 +35,12 @@ export default function Footer() {
             </p>
             <div className="flex gap-4">
               {[
-                { Icon: Instagram, href: '#' },
-                { Icon: Twitter, href: '#' },
-                { Icon: Facebook, href: '#' },
-                { Icon: Youtube, href: '#' },
-              ].map(({ Icon, href }) => (
-                <a key={href} href={href} className="text-cream/40 hover:text-cream transition-colors duration-200">
+                { Icon: Instagram, href: '#instagram', label: 'Instagram' },
+                { Icon: Twitter, href: '#twitter', label: 'Twitter' },
+                { Icon: Facebook, href: '#facebook', label: 'Facebook' },
+                { Icon: Youtube, href: '#youtube', label: 'Youtube' },
+              ].map(({ Icon, href, label }) => (
+                <a key={href} href={href} aria-label={label} className="text-cream/40 hover:text-cream transition-colors duration-200">
                   <Icon size={16} strokeWidth={1.5} />
                 </a>
               ))}

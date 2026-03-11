@@ -12,7 +12,7 @@ export default function ProductCard({ product, index = 0 }) {
   const [adding, setAdding] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);
 
-  const imgSrc = product.image_url || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop';
+  const imgSrc = product.image || product.image_url || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop';
 
   const handleAddToCart = async (e) => {
     e.preventDefault();

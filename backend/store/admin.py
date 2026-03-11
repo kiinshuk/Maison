@@ -1,14 +1,20 @@
 from django.contrib import admin
 from django.utils.html import format_html
+from django.db import models
+from django import forms
 from .models import Category, Product, ProductImage, Cart, CartItem, Order, OrderItem, Review
 
 
-@admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'slug', 'description']
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ['name']
     fields = ['name', 'slug', 'description', 'image']
+
+    class Media:
+        css = {
+            'all': ('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',)
+        }
 
 
 class ProductImageInline(admin.TabularInline):
@@ -33,7 +39,7 @@ class ProductAdmin(admin.ModelAdmin):
             'fields': ('price', 'compare_price', 'discount_percentage_display')
         }),
         ('Media', {
-            'fields': ('image_url',)
+            'fields': ('image',)
         }),
         ('Inventory', {
             'fields': ('stock', 'is_available', 'is_featured')
@@ -45,7 +51,8 @@ class ProductAdmin(admin.ModelAdmin):
     )
 
     def discount_percentage_display(self, obj):
-        return f'{obj.discount_percentage}%' if obj.discount_percentage else '—'
+        return format_html('<span style="color: #00d9a5; font-weight: 600;">{}%</span>', 
+                         f'{obj.discount_percentage}%' if obj.discount_percentage else '—')
     discount_percentage_display.short_description = 'Discount'
 
 

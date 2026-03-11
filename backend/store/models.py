@@ -6,7 +6,7 @@ class Category(models.Model):
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
     description = models.TextField(blank=True)
-    image = models.CharField(max_length=500, blank=True, default='')
+    image = models.ImageField(upload_to='categories/', blank=True, default='')
 
     class Meta:
         verbose_name_plural = 'Categories'
@@ -23,8 +23,8 @@ class Product(models.Model):
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     compare_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    image = models.CharField(max_length=500, blank=True, default='')
-    image_url = models.URLField(blank=True)
+    image = models.ImageField(upload_to='products/', blank=True, default='')
+    image_url = models.ImageField(upload_to='products/', blank=True, default='')
     stock = models.PositiveIntegerField(default=0)
     is_available = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
@@ -48,7 +48,7 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
-    image_url = models.URLField()
+    image_url = models.ImageField(upload_to='products/gallery/', blank=True)
     alt_text = models.CharField(max_length=200, blank=True)
     is_primary = models.BooleanField(default=False)
 

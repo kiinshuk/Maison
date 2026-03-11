@@ -82,7 +82,7 @@ export default function ProductDetail() {
     </div>
   );
 
-  const imgSrc = product.image_url || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=900&auto=format&fit=crop';
+  const imgSrc = product.image || product.image_url || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=900&auto=format&fit=crop';
 
   return (
     <div className="bg-cream">

@@ -1,10 +1,40 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from django.conf import settings
 from .models import Category, Product, ProductImage, Cart, CartItem, Order, OrderItem, Review
+
+
+def get_full_image_url(image_field, request=None):
+    if not image_field:
+        return None
+    
+    url = str(image_field) if image_field else None
+    
+    if not url or url == '' or url == 'None':
+        return None
+    
+    if url.startswith('http'):
+        return url
+    
+    if hasattr(image_field, 'url') and image_field:
+        try:
+            url = image_field.url
+            if url.startswith('http'):
+                return url
+        except:
+            pass
+    
+    if url.startswith('/media/'):
+        if request:
+            return request.build_absolute_uri(url)
+        return settings.MEDIA_URL + url
+    
+    return settings.MEDIA_URL + url
 
 
 class CategorySerializer(serializers.ModelSerializer):
     product_count = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField()
 
     class Meta:
         model = Category
@@ -13,11 +43,19 @@ class CategorySerializer(serializers.ModelSerializer):
     def get_product_count(self, obj):
         return obj.products.filter(is_available=True).count()
 
+    def get_image(self, obj):
+        return get_full_image_url(obj.image, self.context.get('request'))
+
 
 class ProductImageSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
+
     class Meta:
         model = ProductImage
         fields = ['id', 'image_url', 'alt_text', 'is_primary']
+
+    def get_image_url(self, obj):
+        return get_full_image_url(obj.image_url, self.context.get('request'))
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -25,6 +63,8 @@ class ProductSerializer(serializers.ModelSerializer):
     category_slug = serializers.CharField(source='category.slug', read_only=True)
     discount_percentage = serializers.ReadOnlyField()
     images = ProductImageSerializer(many=True, read_only=True)
+    image = serializers.SerializerMethodField()
+    image_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -34,6 +74,12 @@ class ProductSerializer(serializers.ModelSerializer):
             'rating', 'review_count', 'category', 'category_name',
             'category_slug', 'discount_percentage', 'images', 'created_at'
         ]
+
+    def get_image(self, obj):
+        return get_full_image_url(obj.image, self.context.get('request'))
+
+    def get_image_url(self, obj):
+        return get_full_image_url(obj.image_url, self.context.get('request'))
 
 
 class CartItemSerializer(serializers.ModelSerializer):
