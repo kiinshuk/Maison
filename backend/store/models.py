@@ -1,19 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
-try:
-    from cloudinary.models import CloudinaryField
-except ImportError:
-    CloudinaryField = None
 
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
     description = models.TextField(blank=True)
-    if CloudinaryField:
-        image = CloudinaryField('image', folder='maison/categories', blank=True, transformation=[{'width': 800, 'height': 800, 'crop': 'limit'}])
-    else:
-        image = models.ImageField(upload_to='categories/', blank=True, default='')
+    image = models.ImageField(upload_to='categories/', blank=True, default='')
 
     class Meta:
         verbose_name_plural = 'Categories'
@@ -30,12 +23,8 @@ class Product(models.Model):
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     compare_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    if CloudinaryField:
-        image = CloudinaryField('image', folder='maison/products', blank=True, transformation=[{'width': 800, 'height': 1000, 'crop': 'limit'}])
-        image_url = CloudinaryField('image_url', folder='maison/products', blank=True, transformation=[{'width': 800, 'height': 1000, 'crop': 'limit'}])
-    else:
-        image = models.ImageField(upload_to='products/', blank=True, default='')
-        image_url = models.ImageField(upload_to='products/', blank=True, default='')
+    image = models.ImageField(upload_to='products/', blank=True, default='')
+    image_url = models.ImageField(upload_to='products/', blank=True, default='')
     stock = models.PositiveIntegerField(default=0)
     is_available = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
@@ -59,10 +48,7 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
-    if CloudinaryField:
-        image_url = CloudinaryField('image', folder='maison/products/gallery', blank=True, transformation=[{'width': 800, 'height': 1000, 'crop': 'limit'}])
-    else:
-        image_url = models.ImageField(upload_to='products/gallery/', blank=True)
+    image_url = models.ImageField(upload_to='products/gallery/', blank=True)
     alt_text = models.CharField(max_length=200, blank=True)
     is_primary = models.BooleanField(default=False)
 
@@ -94,7 +80,7 @@ class CartItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
-        return f"{self.quantity} x {self.product.name}"
+        return f"{self.product.name} x {self.quantity}"
 
     @property
     def subtotal(self):
@@ -109,14 +95,14 @@ class Order(models.Model):
         ('delivered', 'Delivered'),
         ('cancelled', 'Cancelled'),
     ]
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    shipping_address = models.TextField()
     shipping_name = models.CharField(max_length=200)
     shipping_email = models.EmailField()
     shipping_phone = models.CharField(max_length=20)
+    shipping_address = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -127,11 +113,11 @@ class Order(models.Model):
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
+    quantity = models.PositiveIntegerField(default=1)
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return f"{self.quantity} x {self.product.name}"
+        return f"{self.product.name} x {self.quantity}"
 
     @property
     def subtotal(self):
@@ -142,11 +128,8 @@ class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     rating = models.PositiveIntegerField(choices=[(i, i) for i in range(1, 6)])
-    comment = models.TextField()
+    comment = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        unique_together = ('product', 'user')
-
     def __str__(self):
-        return f"{self.user.username} - {self.product.name} ({self.rating}★)"
+        return f"{self.product.name} - {self.rating} stars by {self.user.username}"
