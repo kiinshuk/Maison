@@ -2,6 +2,7 @@
 from .settings import *
 import os
 import dj_database_url
+from django.http import JsonResponse
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'change-me-in-production')
 
@@ -11,17 +12,21 @@ ALLOWED_HOSTS = [
     '.onrender.com',
     'localhost',
     '127.0.0.1',
+    'maison-dzus.onrender.com',
 ]
 
 # Allow your Vercel frontend domain
 _frontend_url = os.environ.get('FRONTEND_URL', '').strip()
 CORS_ALLOWED_ORIGINS = [
     'https://maison-seven-pi.vercel.app',
+    'https://maison.vercel.app',
 ]
 # Also add any extra URL from env var
 if _frontend_url.startswith('http') and _frontend_url not in CORS_ALLOWED_ORIGINS:
     CORS_ALLOWED_ORIGINS.append(_frontend_url)
 CORS_ALLOW_CREDENTIALS = True
+CORS_EXPOSE_HEADERS = ['Content-Type']
+CORS_ALLOW_HEADERS = ['*']
 
 # Database — Render provides DATABASE_URL env var for PostgreSQL
 DATABASES = {
